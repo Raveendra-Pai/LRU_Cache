@@ -25,7 +25,6 @@ func (c *LRUCache) Get(key string) (any, error) {
 	data, ok := c.lookup[key]
 
 	if !ok {
-		fmt.Printf("Key %v is not found", key)
 		return "", fmt.Errorf("not found")
 	}
 
@@ -64,13 +63,14 @@ func (c *LRUCache) Put(k string, v string) {
 		if existingNode == c.tail {
 			c.updateTail()
 		}
+		existingNode.value = v //overwriting the new value for existing key
 		c.setHead(existingNode)
 		return
 	}
 
 	if c.len >= c.cap {
 		fmt.Printf("Deleing key: %v from map", c.tail.value)
-		delete(c.lookup, c.tail.key)
+		delete(c.lookup, c.tail.key) //remove the tail key from the lookup map
 		c.updateTail()
 		c.len--
 
